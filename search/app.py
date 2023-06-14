@@ -140,8 +140,6 @@ def create_context(
         cur_len += row['n_tokens'] + 4
         
         # If the context is too long, break
-        
-        print("contesto: ", row["text"])
         if cur_len > max_len:
             break
         
@@ -156,7 +154,7 @@ def answer_question(
     df,
     model="text-davinci-003",
     question="Am I allowed to publish model outputs to Twitter, without a human review?",
-    max_len=1500,
+    max_len=500,
     size="ada",
     debug=False,
     max_tokens=150,
