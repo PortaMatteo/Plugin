@@ -9,7 +9,7 @@ from openai.embeddings_utils import distances_from_embeddings
 #prendiamo la chiave nel file env
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
-
+'''
 def remove_newlines(serie):
     serie = serie.str.replace('\n', ' ')
     serie = serie.str.replace('\\n', ' ')
@@ -104,21 +104,17 @@ for row in df.iterrows():
     else:
         shortened.append( row[1]['text'] )
 
-'''
 df = pd.DataFrame(shortened, columns = ['text'])
 df['n_tokens'] = df.text.apply(lambda x: len(tokenizer.encode(x)))
 df.n_tokens.hist()
-'''
 
 df['embeddings'] = df.text.apply(lambda x: openai.Embedding.create(input=x, engine='text-embedding-ada-002')['data'][0]['embedding'])
 
 df.to_csv('output/embeddings.csv')
 #df.head()
-
+'''
 df=pd.read_csv('output/embeddings.csv', index_col=0)
 df['embeddings'] = df['embeddings'].apply(eval).apply(np.array)
-
-#df.head()
 
 def create_context(
     question, df, max_len=1800, size="ada"
@@ -144,12 +140,15 @@ def create_context(
         cur_len += row['n_tokens'] + 4
         
         # If the context is too long, break
+        
+        print("contesto: ", row["text"])
         if cur_len > max_len:
             break
         
         # Else add it to the text that is being returned
         returns.append(row["text"])
-
+        
+    
     # Return the context
     return "\n\n###\n\n".join(returns)
 
@@ -157,7 +156,7 @@ def answer_question(
     df,
     model="text-davinci-003",
     question="Am I allowed to publish model outputs to Twitter, without a human review?",
-    max_len=500,
+    max_len=1500,
     size="ada",
     debug=False,
     max_tokens=150,
@@ -195,4 +194,4 @@ def answer_question(
         print(e)
         return ""
 
-print(answer_question(df, question=input("chiedi: ")))
+print(answer_question(df, question=input("chiedi: "),debug =True))
