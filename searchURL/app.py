@@ -235,8 +235,7 @@ while ciclo == True:
         soup = BeautifulSoup(page.content, "html.parser")
         body = soup.find('body')
         content = str(soup.find_all("p"))
-                # Esempio di utilizzo
-        testo_originale = "Questo è un <esempio> di testo con <tag> angolari."
+    
         contenuto_formattato = rimuovi_contenuto_angolare(content)
         print(contenuto_formattato)
 
