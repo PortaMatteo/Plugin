@@ -11,8 +11,6 @@ import time
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-
-'''
 #####################################################################
 def remove_newlines(serie):
     serie = serie.str.replace('\n', ' ')
@@ -118,20 +116,26 @@ for i,row in df.iterrows():
     listEmbeddings.append(openai.Embedding.create(input=row['text'], engine='text-embedding-ada-002')['data'][0]['embedding'])
     if i != 0:
         if not i%10:
-            print(i)
+            # i : len = x : 100
+            print(f'{(i * 100) // len(df)}%')
             time.sleep(7)
 
 df['embeddings'] = listEmbeddings
-
-df.to_csv('output/embeddings.csv')
-#df.head()
-                                        ###################################################################
-'''
-
-
-
-df=pd.read_csv('output/embeddings.csv', index_col=0)
 print(df)
+
+df1=pd.read_csv('output/embeddings.csv', index_col=0)
+
+pd.concat([df1,df],ignore_index=True).to_csv('output/embeddings.csv')
+
+
+
+                                        ##########################################################################################
+
+
+
+
+df = pd.read_csv('output/embeddings.csv', index_col=0)
+
 df['embeddings'] = df['embeddings'].apply(eval).apply(np.array)
 
 def create_context(
@@ -172,10 +176,10 @@ def answer_question(
     df,
     model="text-davinci-003",
     question="Am I allowed to publish model outputs to Twitter, without a human review?",
-    max_len=500,
+    max_len=750,
     size="ada",
     debug=False,
-    max_tokens=150,
+    max_tokens=250,
     stop_sequence=None
 ):
     """
