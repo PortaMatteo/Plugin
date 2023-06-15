@@ -5,11 +5,15 @@ import openai
 from dotenv import load_dotenv
 import numpy as np
 from openai.embeddings_utils import distances_from_embeddings
+import time
 
 #prendiamo la chiave nel file env
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+
 '''
+#####################################################################
 def remove_newlines(serie):
     serie = serie.str.replace('\n', ' ')
     serie = serie.str.replace('\\n', ' ')
@@ -49,7 +53,7 @@ df['n_tokens'] = df.text.apply(lambda x: len(tokenizer.encode(x)))
 # Visualize the distribution of the number of tokens per row using a histogram
 # print(df.n_tokens.hist())
 
-max_tokens = 500
+max_tokens = 250
 
 # Function to split the text into chunks of a maximum number of tokens
 def split_into_many(text, max_tokens = max_tokens):
@@ -108,12 +112,26 @@ df = pd.DataFrame(shortened, columns = ['text'])
 df['n_tokens'] = df.text.apply(lambda x: len(tokenizer.encode(x)))
 df.n_tokens.hist()
 
-df['embeddings'] = df.text.apply(lambda x: openai.Embedding.create(input=x, engine='text-embedding-ada-002')['data'][0]['embedding'])
+listEmbeddings = []
+
+for i,row in df.iterrows():
+    listEmbeddings.append(openai.Embedding.create(input=row['text'], engine='text-embedding-ada-002')['data'][0]['embedding'])
+    if i != 0:
+        if not i%10:
+            print(i)
+            time.sleep(7)
+
+df['embeddings'] = listEmbeddings
 
 df.to_csv('output/embeddings.csv')
 #df.head()
+                                        ###################################################################
 '''
+
+
+
 df=pd.read_csv('output/embeddings.csv', index_col=0)
+print(df)
 df['embeddings'] = df['embeddings'].apply(eval).apply(np.array)
 
 def create_context(
