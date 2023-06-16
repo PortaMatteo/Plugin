@@ -261,6 +261,7 @@ while ciclo == True:
         # Set the text column to be the raw text with the newlines removed
         df['text'] = df.fname + ". " + remove_newlines(df.text)
         df.to_csv('output/scraped.csv')
+         
         df.head()
 
         # Load the cl100k_base tokenizer which is designed to work with the ada-002 model
