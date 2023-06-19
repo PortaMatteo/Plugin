@@ -86,7 +86,7 @@ class DataService():
 
 
 
-    def pdf_to_embeddings(self, pdf_path: str, chunk_length: int = 1000):
+    def pdf_to_embeddings(self, pdf_path: str, chunk_length: int = 550):
         # Read data from pdf file and split it into chunks
         reader = PdfReader(pdf_path)
         chunks = []
