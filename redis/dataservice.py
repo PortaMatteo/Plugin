@@ -30,7 +30,7 @@ class DataService():
 
     def drop_redis_data(self, index_name: str = INDEX_NAME):
         try:
-            self.redis_client.ft(index_name).dropindex()
+            self.redis_client.flushdb()
             print('Index dropped')
         except:
             # Index doees not exist
@@ -102,7 +102,8 @@ class DataService():
 
     def txt_to_embeddings(self, text, chunk_length: int = 250):
         # Read data from pdf file and split it into chunks
-
+        text = open(text, "r")
+        text = text.read()
 
         chunks = []
         
@@ -114,7 +115,7 @@ class DataService():
             model='text-embedding-ada-002', input=chunks)
         return [{'id': value['index'], 'vector':value['embedding'], 'text':chunks[value['index']]} for value in response['data']]
     
-    def url_to_embeddings(self, url, chunk_length: int = 1000):
+    def url_to_embeddings(self, url, chunk_length: int = 250):
         # Read data from pdf file and split it into chunks
 
         def rimuovi_contenuto_angolare(testo):
