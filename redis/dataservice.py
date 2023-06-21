@@ -118,7 +118,7 @@ class DataService():
     def url_to_embeddings(self, url, chunk_length: int = 250):
         # Read data from pdf file and split it into chunks
 
-        def rimuovi_contenuto_angolare(testo):
+        def format_url(testo):
             pattern = r"<.*?>"  # Pattern per cercare "<" seguito da qualsiasi carattere, incluso il newline, fino a ">"
             testo_senza_angolari = re.sub(pattern, "", testo)  # Rimuovi i match del pattern dal testo
             return testo_senza_angolari
@@ -131,7 +131,7 @@ class DataService():
         body = soup.find('body')
         content = str(soup.find_all("p"))
     
-        text = rimuovi_contenuto_angolare(content)
+        text = format_url(content)
 
 
         chunks = []
