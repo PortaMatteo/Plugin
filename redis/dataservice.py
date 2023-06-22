@@ -66,7 +66,7 @@ class DataService():
                 definition=IndexDefinition(
                     prefix=[PREFIX], index_type=IndexType.HASH)
             )
-
+        
         for embedding in embeddings:
             key = f"{PREFIX}:{str(embedding['id'])}"
             embedding["vector"] = np.array(
@@ -98,6 +98,7 @@ class DataService():
         # Create embeddings
         response = openai.Embedding.create(
             model='text-embedding-ada-002', input=chunks)
+        print([value['index'] for value in response['data']])
         return [{'id': value['index'], 'vector':value['embedding'], 'text':chunks[value['index']]} for value in response['data']]
 
     def txt_to_embeddings(self, text, chunk_length: int = 250):
