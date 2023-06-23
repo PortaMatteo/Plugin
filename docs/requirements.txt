@@ -1,0 +1,8 @@
+openai
+redis
+wget
+pandas
+fire
+pypdf 
+python-dotenv
+beautifulsoup4
